@@ -119,6 +119,7 @@ module.exports = {
     }),
     new webpack.DefinePlugin(envVars),
     new ForkTsCheckerWebpackPlugin(),
-    new ESLintPlugin({ extensions: ['ts', 'tsx'] })
+    new ESLintPlugin({ extensions: ['ts', 'tsx'] }),
+    new MiniCssExtractPlugin()
   ]
 };

@@ -22,7 +22,7 @@ export default [
       'prefer-const': 'error'
     }
   },
-  { ignores: ['config/*', 'dist/*'] },
+  { ignores: ['config/*', 'dist/*', 'pnpm-lock.yaml'] },
   {
     settings: {
       react: {
