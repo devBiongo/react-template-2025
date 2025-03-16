@@ -39,10 +39,10 @@ module.exports = {
     filename: `static/js/${generateTimestamp()}.[chunkhash:8].js`,
     path: path.join(rootPath, 'dist'),
     clean: true,
-    publicPath: '/' // 打包后文件的公共前缀路径
+    publicPath: '/' // prefixPath
   },
   cache: {
-    type: 'filesystem' // 使用文件缓存
+    type: 'filesystem'
   },
   module: {
     rules: [
@@ -53,11 +53,7 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              presets: [
-                '@babel/preset-env',
-                '@babel/preset-react',
-                '@babel/preset-typescript'
-              ]
+              presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript']
             }
           }
         ]
@@ -65,28 +61,19 @@ module.exports = {
       {
         test: /.css$/,
         include: [srcPath],
-        use: [
-          isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader',
-          'postcss-loader'
-        ]
+        use: [isDev ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
       },
       {
         test: /.less$/,
         include: [srcPath],
-        use: [
-          isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader',
-          'postcss-loader',
-          'less-loader'
-        ]
+        use: [isDev ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'less-loader']
       },
       {
         test: /.(png|jpg|jpeg|gif|svg)$/,
         type: 'asset',
         parser: {
           dataUrlCondition: {
-            maxSize: 10 * 1024 // 小于10kb转base64位
+            maxSize: 10 * 1024 // if < 10kb convert to base64
           }
         },
         generator: {
@@ -94,7 +81,7 @@ module.exports = {
         }
       },
       {
-        test: /.(woff2?|eot|ttf|otf)$/, // 匹配字体图标文件
+        test: /.(woff2?|eot|ttf|otf)$/,
         type: 'asset',
         parser: {
           dataUrlCondition: {
@@ -106,7 +93,7 @@ module.exports = {
         }
       },
       {
-        test: /.(mp4|webm|ogg|mp3|wav|flac|aac)$/, // 匹配媒体文件
+        test: /.(mp4|webm|ogg|mp3|wav|flac|aac)$/,
         type: 'asset',
         parser: {
           dataUrlCondition: {
