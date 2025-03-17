@@ -1,9 +1,13 @@
-const { merge } = require('webpack-merge');
 const path = require('path');
-const baseConfig = require('./webpack.config.base.js');
+const { merge } = require('webpack-merge');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const dotenv = require('dotenv');
 
-module.exports = merge(baseConfig, {
+dotenv.config({
+  path: path.join(process.cwd(), '.env.dev')
+});
+
+module.exports = merge(require('./webpack.common.js'), {
   mode: 'development',
   devtool: 'eval-cheap-module-source-map',
   devServer: {

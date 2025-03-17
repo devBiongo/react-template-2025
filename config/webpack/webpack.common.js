@@ -1,4 +1,3 @@
-const dotenv = require('dotenv');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -7,11 +6,6 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 
 const rootPath = process.cwd();
 const srcPath = path.join(rootPath, 'src');
-const isDev = process.env.NODE_ENV === 'production';
-
-dotenv.config({
-  path: path.resolve(rootPath, isDev ? '.env.prod' : '.env.dev')
-});
 
 const envVars = Object.keys(process.env)
   .filter((key) => key.startsWith('APP_'))
@@ -19,6 +13,8 @@ const envVars = Object.keys(process.env)
     envObj[`process.env.${key}`] = JSON.stringify(process.env[key]);
     return envObj;
   }, {});
+
+console.log({ envVars });
 
 module.exports = {
   entry: path.join(srcPath, 'index.tsx'),
@@ -40,7 +36,11 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript']
+              presets: [
+                '@babel/preset-env',
+                ['@babel/preset-react', { runtime: 'automatic' }],
+                '@babel/preset-typescript'
+              ]
             }
           }
         ]

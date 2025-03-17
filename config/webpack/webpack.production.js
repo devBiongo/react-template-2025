@@ -1,18 +1,22 @@
-const { merge } = require('webpack-merge');
 const path = require('path');
 const globAll = require('glob-all');
-const baseConfig = require('./webpack.config.base.js');
+const { merge } = require('webpack-merge');
 const { PurgeCSSPlugin } = require('purgecss-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+const dotenv = require('dotenv');
 
 const rootPath = process.cwd();
 const srcPath = path.join(rootPath, 'src');
 
-module.exports = merge(baseConfig, {
+dotenv.config({
+  path: path.resolve(rootPath, '.env.prod')
+});
+
+module.exports = merge(require('./webpack.common.js'), {
   mode: 'production',
   module: {
     rules: [
