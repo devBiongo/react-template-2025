@@ -2,7 +2,7 @@ const { merge } = require('webpack-merge');
 const path = require('path');
 const globAll = require('glob-all');
 const baseConfig = require('./webpack.config.base.js');
-const PurgeCSSPlugin = require('purgecss-webpack-plugin');
+const { PurgeCSSPlugin } = require('purgecss-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
@@ -14,16 +14,30 @@ const srcPath = path.join(rootPath, 'src');
 
 module.exports = merge(baseConfig, {
   mode: 'production',
+  module: {
+    rules: [
+      {
+        oneOf: [
+          {
+            test: /\.css$/,
+            use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
+          },
+          {
+            test: /\.less$/,
+            use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'less-loader']
+          }
+        ]
+      }
+    ]
+  },
   optimization: {
     minimizer: [
-      // CSS minification
       new CssMinimizerPlugin(),
-      // JS minification
       new TerserPlugin({
-        parallel: true, // Enable multi-threaded compression
+        parallel: true,
         terserOptions: {
           compress: {
-            pure_funcs: ['console.log'] // remove console.log
+            pure_funcs: ['console.log']
           }
         }
       })
@@ -43,6 +57,12 @@ module.exports = merge(baseConfig, {
           minChunks: 2,
           chunks: 'initial',
           minSize: 0
+        },
+        styles: {
+          name: 'styles',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true
         }
       }
     }
@@ -63,10 +83,7 @@ module.exports = merge(baseConfig, {
       filename: 'static/css/[name].[chunkhash:8].css'
     }),
     new PurgeCSSPlugin({
-      paths: globAll.sync([`${srcPath}/**/*.tsx`, path.join(rootPath, 'public', 'index.html')]),
-      safelist: {
-        standard: [/^ant-/]
-      }
+      paths: globAll.sync([`${srcPath}/**/*.tsx`, path.join(rootPath, 'public', 'index.html')])
     }),
     new CompressionPlugin({
       test: /.(js|css)$/,

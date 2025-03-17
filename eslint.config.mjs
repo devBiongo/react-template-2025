@@ -4,8 +4,6 @@ import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-const isProd = process.env.NODE_ENV === 'production';
-
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   { files: ['src/**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
@@ -16,8 +14,8 @@ export default [
   // pluginReact.configs.flat.recommended,
   {
     rules: {
-      'no-console': isProd ? 'error' : 'off',
-      'no-debugger': isProd ? 'error' : 'off',
+      'no-console': 'warn',
+      'no-debugger': 'warn',
       eqeqeq: 'error',
       'prefer-const': 'error'
     }

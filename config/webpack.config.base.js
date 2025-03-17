@@ -2,7 +2,6 @@ const dotenv = require('dotenv');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
@@ -21,25 +20,13 @@ const envVars = Object.keys(process.env)
     return envObj;
   }, {});
 
-function generateTimestamp() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0'); // 月份从 0 开始
-  const day = String(now.getDate()).padStart(2, '0');
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const seconds = String(now.getSeconds()).padStart(2, '0');
-
-  return `${year}${month}${day}${hours}${minutes}${seconds}`;
-}
-
 module.exports = {
   entry: path.join(srcPath, 'index.tsx'),
   output: {
-    filename: `static/js/${generateTimestamp()}.[chunkhash:8].js`,
+    filename: 'static/js/[name].[chunkhash:8].js',
     path: path.join(rootPath, 'dist'),
     clean: true,
-    publicPath: '/' // prefixPath
+    publicPath: '/'
   },
   cache: {
     type: 'filesystem'
@@ -47,7 +34,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /.(ts|tsx)$/,
+        test: /\.(ts|tsx|js|jsx)$/,
         include: [srcPath],
         use: [
           {
@@ -59,21 +46,11 @@ module.exports = {
         ]
       },
       {
-        test: /.css$/,
-        include: [srcPath],
-        use: [isDev ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
-      },
-      {
-        test: /.less$/,
-        include: [srcPath],
-        use: [isDev ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'less-loader']
-      },
-      {
         test: /.(png|jpg|jpeg|gif|svg)$/,
         type: 'asset',
         parser: {
           dataUrlCondition: {
-            maxSize: 10 * 1024 // if < 10kb convert to base64
+            maxSize: 10 * 1024
           }
         },
         generator: {
@@ -107,7 +84,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js', '.tsx', '.ts'],
+    extensions: ['.tsx', '.ts', '.jsx', '.js', '.json'],
     alias: {
       src: srcPath
     }
@@ -119,7 +96,6 @@ module.exports = {
     }),
     new webpack.DefinePlugin(envVars),
     new ForkTsCheckerWebpackPlugin(),
-    new ESLintPlugin({ extensions: ['ts', 'tsx'] }),
-    new MiniCssExtractPlugin()
+    new ESLintPlugin({ extensions: ['ts', 'tsx'] })
   ]
 };
