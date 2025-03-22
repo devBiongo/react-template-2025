@@ -24,11 +24,30 @@ module.exports = merge(require('./webpack.common.js'), {
         oneOf: [
           {
             test: /\.css$/,
-            use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
+            use: [
+              MiniCssExtractPlugin.loader,
+              {
+                loader: 'css-loader',
+                options: {
+                  modules: true
+                }
+              },
+              'postcss-loader'
+            ]
           },
           {
             test: /\.less$/,
-            use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'less-loader']
+            use: [
+              MiniCssExtractPlugin.loader,
+              {
+                loader: 'css-loader',
+                options: {
+                  modules: true
+                }
+              },
+              'postcss-loader',
+              'less-loader'
+            ]
           }
         ]
       }

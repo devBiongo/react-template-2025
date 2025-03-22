@@ -14,8 +14,6 @@ const envVars = Object.keys(process.env)
     return envObj;
   }, {});
 
-console.log({ envVars });
-
 module.exports = {
   entry: path.join(srcPath, 'index.tsx'),
   output: {

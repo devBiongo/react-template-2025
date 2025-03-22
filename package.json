@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "cross-env webpack serve --progress --config config/webpack/webpack.development.js --open",
+    "dev": "cross-env webpack serve --progress --color --config config/webpack/webpack.development.js --open",
     "build": "cross-env webpack --progress --config config/webpack/webpack.production.js",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix"

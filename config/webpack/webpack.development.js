@@ -11,7 +11,7 @@ module.exports = merge(require('./webpack.common.js'), {
   mode: 'development',
   devtool: 'eval-cheap-module-source-map',
   devServer: {
-    port: 3000,
+    port: 3003,
     compress: false,
     hot: true,
     historyApiFallback: true,
@@ -25,11 +25,30 @@ module.exports = merge(require('./webpack.common.js'), {
         oneOf: [
           {
             test: /\.css$/,
-            use: ['style-loader', 'css-loader', 'postcss-loader']
+            use: [
+              'style-loader',
+              {
+                loader: 'css-loader',
+                options: {
+                  modules: true
+                }
+              },
+              'postcss-loader'
+            ]
           },
           {
             test: /\.less$/,
-            use: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader']
+            use: [
+              'style-loader',
+              {
+                loader: 'css-loader',
+                options: {
+                  modules: true
+                }
+              },
+              'postcss-loader',
+              'less-loader'
+            ]
           }
         ]
       }
